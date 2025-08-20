@@ -1,6 +1,7 @@
 package br.anhembi.eventos.controller;
 
 import br.anhembi.eventos.model.Evento;
+import br.anhembi.eventos.model.enums.ListaCategorias;
 import br.anhembi.eventos.services.EventoService;
 import br.anhembi.eventos.services.UsuarioService;
 import br.anhembi.eventos.view.Menu;
@@ -15,9 +16,21 @@ public class EventosController {
     public static void cadastrarEvento(Menu menu) {
         String nome = menu.lerLinha("Nome do evento: ");
         String endereco = menu.lerLinha("Endereço: ");
-        String categoria = menu.lerLinha("Categoria: ");
+        String categoria = menu.mostrarMenu("Escolha a categoria do evento:",
+                ListaCategorias.CATEGORIAS);
         LocalDateTime horarioInicio = dateTimePrompt(menu, "Data de Início (dd/MM/yyyy HH:mm): ");
-        LocalDateTime horarioFim = dateTimePrompt(menu, "Data de Fim (dd/MM/yyyy HH:mm): ");
+
+        LocalDateTime horarioFim;
+        while (true) {
+            horarioFim = dateTimePrompt(menu, "Data de Fim (dd/MM/yyyy HH:mm): ");
+            if (horarioFim.isBefore(horarioInicio)) {
+                System.out.println(
+                        "A data de fim não pode ser anterior à data de início. Tente novamente.");
+            } else {
+                break;
+            }
+        }
+
         String descricao = menu.lerLinha("Descrição: ");
 
         eventos.add(new Evento(EventoService.gerarIdUnico(), nome, endereco, categoria,
