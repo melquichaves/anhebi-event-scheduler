@@ -23,25 +23,27 @@ public class EventosController {
             try {
                 horario = LocalDateTime.parse(dataHora, formatter);
             } catch (Exception e) {
-                System.out.println("Formato inválido! Digite no formato correto: dd/MM/yyyy HH:mm (ex: 14/08/2025 20:00)");
+                System.out.println(
+                        "Formato inválido! Digite no formato correto: dd/MM/yyyy HH:mm (ex: 14/08/2025 20:00)");
             }
         }
 
         String descricao = menu.lerLinha("Descrição: ");
 
-        eventos.add(new Evento(
-                EventoService.gerarIdUnico(),
-                nome, 
-                endereco, 
-                categoria, 
-                horario, 
-                horario.plusHours(2), // Definindo horário de fim como 2 horas após o início
-                descricao
-        ));
+        eventos.add(new Evento(EventoService.gerarIdUnico(), nome, endereco, categoria, horario, horario.plusHours(2), // Definindo
+                                                                                                                       // horário
+                                                                                                                       // de
+                                                                                                                       // fim
+                                                                                                                       // como
+                                                                                                                       // 2
+                                                                                                                       // horas
+                                                                                                                       // após
+                                                                                                                       // o
+                                                                                                                       // início
+                descricao));
         EventoService.salvarEventos(eventos);
         System.out.println("Evento cadastrado!\n");
     }
-
 
     public static void listarEventos() {
         if (eventos.isEmpty()) {
@@ -54,6 +56,5 @@ public class EventosController {
             System.out.println();
         }
     }
-
 
 }

@@ -17,14 +17,9 @@ public class EventoService {
         try (PrintWriter writer = new PrintWriter(new FileWriter(NomeArquivos.EVENTOS.getNomeArquivo()))) {
             for (Evento e : eventos) {
                 String participantes = e.getIdParticipantes() != null ? String.join(",", e.getIdParticipantes()) : "";
-                writer.println(e.getId() + ";" +
-                               e.getNome() + ";" +
-                               e.getEndereco() + ";" +
-                               e.getCategoria() + ";" +
-                               e.getHorarioInicio().format(formatter) + ";" +
-                               e.getHorarioFim().format(formatter) + ";" +
-                               e.getDescricao() + ";" +
-                               participantes);
+                writer.println(e.getId() + ";" + e.getNome() + ";" + e.getEndereco() + ";" + e.getCategoria() + ";"
+                        + e.getHorarioInicio().format(formatter) + ";" + e.getHorarioFim().format(formatter) + ";"
+                        + e.getDescricao() + ";" + participantes);
             }
         } catch (IOException ex) {
             System.out.println("Erro ao salvar eventos: " + ex.getMessage());
@@ -34,21 +29,21 @@ public class EventoService {
     public static List<Evento> carregarEventos() {
         List<Evento> eventos = new ArrayList<>();
         File file = new File(NomeArquivos.EVENTOS.getNomeArquivo());
-        if (!file.exists()) return eventos;
+        if (!file.exists())
+            return eventos;
 
         try (BufferedReader br = new BufferedReader(new FileReader(file))) {
             String line;
             while ((line = br.readLine()) != null) {
                 String[] parts = line.split(";");
                 if (parts.length >= 7) {
-                    Evento e = new Evento(
-                            parts[0], // id
+                    Evento e = new Evento(parts[0], // id
                             parts[1], // nome
                             parts[2], // endereco
                             parts[3], // categoria
                             LocalDateTime.parse(parts[4], formatter), // horarioInicio
                             LocalDateTime.parse(parts[5], formatter), // horarioFim
-                            parts[6]  // descricao
+                            parts[6] // descricao
                     );
 
                     if (parts.length > 7 && !parts[7].isEmpty()) {
@@ -86,7 +81,7 @@ public class EventoService {
         File arquivoTemp = new File("eventos_temp.txt");
 
         try (BufferedReader br = new BufferedReader(new FileReader(arquivoOriginal));
-             PrintWriter pw = new PrintWriter(new FileWriter(arquivoTemp))) {
+                PrintWriter pw = new PrintWriter(new FileWriter(arquivoTemp))) {
 
             String line;
             boolean encontrado = false;
@@ -97,9 +92,8 @@ public class EventoService {
                     encontrado = true;
 
                     // mantém participantes existentes
-                    String[] participantes = parts.length > 7 && !parts[7].isEmpty()
-                            ? parts[7].split(",")
-                            : new String[]{};
+                    String[] participantes = parts.length > 7 && !parts[7].isEmpty() ? parts[7].split(",")
+                            : new String[] {};
 
                     List<String> lista = new ArrayList<>(List.of(participantes));
                     if (!lista.contains(idParticipante)) {
@@ -109,8 +103,8 @@ public class EventoService {
                     String participantesAtualizados = String.join(",", lista);
 
                     // escreve linha atualizada
-                    pw.println(parts[0] + ";" + parts[1] + ";" + parts[2] + ";" + parts[3] + ";" +
-                            parts[4] + ";" + parts[5] + ";" + parts[6] + ";" + participantesAtualizados);
+                    pw.println(parts[0] + ";" + parts[1] + ";" + parts[2] + ";" + parts[3] + ";" + parts[4] + ";"
+                            + parts[5] + ";" + parts[6] + ";" + participantesAtualizados);
                 } else {
                     // escreve linha original
                     pw.println(line);

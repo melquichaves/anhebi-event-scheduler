@@ -15,11 +15,25 @@ public class Usuario {
         this.telefone = telefone;
     }
 
-    public String getId() { return id; }
-    public String getNome() { return nome; }
-    public String getEmail() { return email; }
-    public int getIdade() { return idade; }
-    public String getTelefone() { return telefone; }
+    public String getId() {
+        return id;
+    }
+
+    public String getNome() {
+        return nome;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public int getIdade() {
+        return idade;
+    }
+
+    public String getTelefone() {
+        return telefone;
+    }
 
     @Override
     public String toString() {

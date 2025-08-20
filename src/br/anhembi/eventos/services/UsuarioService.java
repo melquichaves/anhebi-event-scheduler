@@ -27,7 +27,8 @@ public class UsuarioService {
     public static List<Usuario> listarUsuarios() {
         List<Usuario> usuarios = new ArrayList<>();
         File file = new File(NomeArquivos.USUARIOS.getNomeArquivo());
-        if (!file.exists()) return usuarios;
+        if (!file.exists())
+            return usuarios;
         try (BufferedReader br = new BufferedReader(new FileReader(NomeArquivos.USUARIOS.getNomeArquivo()))) {
             String linha;
             while ((linha = br.readLine()) != null) {
