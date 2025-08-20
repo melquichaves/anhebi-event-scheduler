@@ -29,7 +29,16 @@ public class EventosController {
 
         String descricao = menu.lerLinha("Descrição: ");
 
-        eventos.add(new Evento(nome, endereco, categoria, horario, descricao));
+        eventos.add(new Evento(
+                EventoService.gerarIdUnico(),
+                nome, 
+                endereco, 
+                categoria, 
+                horario, 
+                horario.plusHours(2), // Definindo horário de fim como 2 horas após o início
+                descricao
+        ));
+        EventoService.salvarEventos(eventos);
         System.out.println("Evento cadastrado!\n");
     }
 

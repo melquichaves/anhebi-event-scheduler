@@ -1,5 +1,6 @@
 package br.anhembi.eventos.controller;
 
+import br.anhembi.eventos.model.enums.ListaOpcoesMenus;
 import br.anhembi.eventos.services.EventoService;
 import br.anhembi.eventos.view.Menu;
 
@@ -11,7 +12,7 @@ public class MenuController {
     }
 
     public boolean exibirMenuLogin() {
-        String[] options = {"Entrar com ID de usuário", "Novo usuário", "Sair"};
+        String[] options = ListaOpcoesMenus.MENU_LOGIN;
         String option;
         do {
             option = menu.mostrarMenu("==== Menu Login ====", options);
@@ -38,7 +39,7 @@ public class MenuController {
     }
 
     public void exibirMenuPrincipal() {
-        String[] options = {"Cadastrar evento", "Listar eventos", "Participar de evento", "Deslogar", "Sair"};
+        String[] options = ListaOpcoesMenus.MENU_PRINCIPAL;
         String option;
         do {
             option = menu.mostrarMenu("==== Menu Principal ====", options);
