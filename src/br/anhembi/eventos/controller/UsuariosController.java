@@ -28,6 +28,7 @@ public class UsuariosController {
         String newId = UsuarioService.gerarIdUnico();
         usuarioLogado = UsuarioService.cadastrarUsuario(newId, nome, email, idade, telefone);
 
+        Menu.limparTela();
         System.out.println("Usuário cadastrado com sucesso! Seu ID é: " + usuarioLogado.getId());
     }
 
@@ -39,10 +40,10 @@ public class UsuariosController {
         Usuario u = UsuarioService.buscarPorId(id);
         if (u != null) {
             usuarioLogado = u;
-            System.out.println("Bem-vindo, " + UsuariosController.usuarioLogado.getNome() + "!");
+            System.out.println("Bem-vindo, " + UsuariosController.usuarioLogado.getNome() + "! \n");
             return true;
         } else {
-            System.out.println("Usuário não encontrado.");
+            System.out.println("Usuário não encontrado. Verifique o ID e tente novamente. \n");
             return false;
         }
     }

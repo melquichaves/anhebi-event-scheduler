@@ -27,7 +27,7 @@ public class MenuController {
             case "Novo usuário":
                 Menu.limparTela();
                 UsuariosController.cadastrarUsuario(menu);
-                System.out.println("Login automático realizado.");
+                System.out.println("Login automático realizado. \n");
                 return true;
             case "Sair":
                 System.out.println("Saindo...");
@@ -48,7 +48,7 @@ public class MenuController {
                 EventosController.cadastrarEvento(menu);
                 break;
             case "Listar eventos":
-                EventosController.listarEventos();
+                EventosController.listarEventos(menu, UsuariosController.usuarioLogado.getId());
                 break;
             case "Participar de evento":
                 System.out.println("Funcionalidade de participação ainda não implementada");

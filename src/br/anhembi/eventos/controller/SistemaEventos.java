@@ -6,6 +6,8 @@ public class SistemaEventos {
 
     public static void main(String[] args) {
         Menu menu = new Menu();
+
+        Menu.limparTela();
         MenuController menuController = new MenuController(menu);
 
         while (true) {

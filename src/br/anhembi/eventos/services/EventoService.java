@@ -7,6 +7,7 @@ import java.io.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
+import java.nio.file.*;
 
 public class EventoService {
 
@@ -96,7 +97,6 @@ public class EventoService {
                 if (parts[0].equals(idEvento)) {
                     encontrado = true;
 
-                    // mantém participantes existentes
                     String[] participantes = parts.length > 7 && !parts[7].isEmpty()
                             ? parts[7].split(",")
                             : new String[] {};
@@ -108,12 +108,10 @@ public class EventoService {
 
                     String participantesAtualizados = String.join(",", lista);
 
-                    // escreve linha atualizada
                     pw.println(parts[0] + ";" + parts[1] + ";" + parts[2] + ";" + parts[3] + ";"
                             + parts[4] + ";" + parts[5] + ";" + parts[6] + ";"
                             + participantesAtualizados);
                 } else {
-                    // escreve linha original
                     pw.println(line);
                 }
             }
@@ -127,9 +125,52 @@ public class EventoService {
             return;
         }
 
-        // substitui arquivo original pelo temporário
-        if (!arquivoTemp.renameTo(arquivoOriginal)) {
-            System.out.println("Erro ao substituir arquivo de eventos.");
+        try {
+            Files.move(arquivoTemp.toPath(), arquivoOriginal.toPath(),
+                    StandardCopyOption.REPLACE_EXISTING);
+        } catch (IOException e) {
+            System.out.println("Erro ao substituir arquivo: " + e.getMessage());
         }
     }
+
+    public static void removerParticipante(String idEvento, String idParticipante) {
+        File arquivoOriginal = new File(NomeArquivos.EVENTOS.getNomeArquivo());
+        File arquivoTemp = new File(NomeArquivos.TEMP_EVENTOS.getNomeArquivo());
+
+        try (BufferedReader br = new BufferedReader(new FileReader(arquivoOriginal));
+                PrintWriter pw = new PrintWriter(new FileWriter(arquivoTemp))) {
+
+            String line;
+
+            while ((line = br.readLine()) != null) {
+                String[] parts = line.split(";");
+                if (parts[0].equals(idEvento)) {
+                    List<String> lista = new ArrayList<>();
+                    if (parts.length > 7 && !parts[7].isEmpty()) {
+                        lista = new ArrayList<>(List.of(parts[7].split(",")));
+                        lista.remove(idParticipante);
+                    }
+                    String participantesAtualizados = String.join(",", lista);
+
+                    pw.println(parts[0] + ";" + parts[1] + ";" + parts[2] + ";" + parts[3] + ";"
+                            + parts[4] + ";" + parts[5] + ";" + parts[6] + ";"
+                            + participantesAtualizados);
+                } else {
+                    pw.println(line);
+                }
+            }
+
+        } catch (IOException e) {
+            System.out.println("Erro ao remover participante: " + e.getMessage());
+            return;
+        }
+
+        try {
+            Files.move(arquivoTemp.toPath(), arquivoOriginal.toPath(),
+                    StandardCopyOption.REPLACE_EXISTING);
+        } catch (IOException e) {
+            System.out.println("Erro ao substituir arquivo: " + e.getMessage());
+        }
+    }
+
 }
