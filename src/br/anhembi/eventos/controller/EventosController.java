@@ -49,61 +49,30 @@ public class EventosController {
             }
         }
 
-        exibirMenuEventos(menu, passados, emAndamento, futuros, idUsuarioLogado);
-    }
-
-    private static void exibirMenuEventos(Menu menu, List<Evento> passados,
-            List<Evento> emAndamento, List<Evento> futuros, String idUsuarioLogado) {
-        // Construir lista visual
-        List<String> opcoesVisuais = new ArrayList<>();
-        List<Evento> todosEventos = new ArrayList<>();
-
-        if (!passados.isEmpty()) {
-            opcoesVisuais.add("==== Eventos Já Ocorridos ====");
-            for (Evento e : passados) {
-                opcoesVisuais.add(e.getNome());
-                todosEventos.add(e);
-            }
-        }
-
-        if (!emAndamento.isEmpty()) {
-            opcoesVisuais.add("==== Eventos em Andamento ====");
-            for (Evento e : emAndamento) {
-                opcoesVisuais.add(e.getNome());
-                todosEventos.add(e);
-            }
-        }
-
-        if (!futuros.isEmpty()) {
-            opcoesVisuais.add("==== Eventos Futuros ====");
-            for (Evento e : futuros) {
-                opcoesVisuais.add(e.getNome());
-                todosEventos.add(e);
-            }
-        }
-
-        // Mapear números para eventos
-        Map<Integer, Evento> numeroParaEvento = new LinkedHashMap<>();
+        Map<Integer, Evento> numeroParaEvento = new HashMap<>();
         int numero = 1;
-        for (String linha : opcoesVisuais) {
-            if (linha.startsWith("====")) {
-                System.out.println(linha);
-            } else {
-                System.out.printf("%d) %s%n", numero, linha);
-                numeroParaEvento.put(numero, todosEventos.get(0));
-                todosEventos.remove(0);
-                numero++;
-            }
-        }
 
-        if (numeroParaEvento.isEmpty())
-            return;
+        System.out.println("==== Lista de Eventos ====");
+
+        numero = exibirEventosPorCategoria(menu, "Eventos Já Ocorridos", passados, numero,
+                numeroParaEvento);
+        numero = exibirEventosPorCategoria(menu, "Eventos em Andamento", emAndamento, numero,
+                numeroParaEvento);
+        numero = exibirEventosPorCategoria(menu, "Eventos Futuros", futuros, numero,
+                numeroParaEvento);
+
+        // Adiciona opção de voltar
+        System.out.printf("\n%d) Voltar%n", numero);
+        int numeroVoltar = numero;
 
         while (true) {
             String input = menu.lerLinha("Escolha um número: ");
             try {
                 int escolha = Integer.parseInt(input);
-                if (numeroParaEvento.containsKey(escolha)) {
+                if (escolha == numeroVoltar) {
+                    // Sai do menu de eventos
+                    break;
+                } else if (numeroParaEvento.containsKey(escolha)) {
                     exibirDetalhesEvento(menu, numeroParaEvento.get(escolha), idUsuarioLogado);
                     break;
                 } else {
@@ -115,7 +84,22 @@ public class EventosController {
         }
     }
 
+    private static int exibirEventosPorCategoria(Menu menu, String titulo, List<Evento> lista,
+            int numeroBase, Map<Integer, Evento> mapa) {
+        if (!lista.isEmpty()) {
+            System.out.println("==== " + titulo + " ====");
+            for (Evento e : lista) {
+                System.out.printf("%d) %s%n", numeroBase, e.getNome());
+                mapa.put(numeroBase, e);
+                numeroBase++;
+            }
+            System.out.println("\n");
+        }
+        return numeroBase;
+    }
+
     private static void exibirDetalhesEvento(Menu menu, Evento evento, String idUsuarioLogado) {
+        // Recarrega o evento para pegar participantes atualizados
         evento = EventoService.buscarPorId(evento.getId());
         Menu.limparTela();
         DateTimeFormatter fmt = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
@@ -130,7 +114,7 @@ public class EventosController {
 
         System.out.println("\nParticipantes:");
         if (evento.getIdParticipantes() == null || evento.getIdParticipantes().length == 0) {
-            System.out.println("Nenhum participante inscrito.");
+            System.out.println("Nenhum participante inscrito. \n");
         } else {
             for (String id : evento.getIdParticipantes()) {
                 System.out.println(UsuarioService.buscarPorId(id).getNome());
@@ -139,7 +123,7 @@ public class EventosController {
         }
 
         boolean jaInscrito = evento.getIdParticipantes() != null
-                && List.of(evento.getIdParticipantes()).contains(idUsuarioLogado);
+                && Arrays.asList(evento.getIdParticipantes()).contains(idUsuarioLogado);
 
         String[] opcoes = jaInscrito ? new String[] { "Remover cadastro", "Voltar" }
                 : new String[] { "Cadastrar-se no evento", "Voltar" };
@@ -149,9 +133,11 @@ public class EventosController {
         if (escolha.equals("Cadastrar-se no evento")) {
             EventoService.adicionarParticipante(evento.getId(), idUsuarioLogado);
             System.out.println("Você foi inscrito no evento! \n");
+            exibirDetalhesEvento(menu, evento, idUsuarioLogado); // atualiza a tela
         } else if (escolha.equals("Remover cadastro")) {
             EventoService.removerParticipante(evento.getId(), idUsuarioLogado);
             System.out.println("Você foi removido do evento! \n");
+            exibirDetalhesEvento(menu, evento, idUsuarioLogado); // atualiza a tela
         } else if (escolha.equals("Voltar")) {
             EventosController.listarEventos(menu, idUsuarioLogado);
         }
