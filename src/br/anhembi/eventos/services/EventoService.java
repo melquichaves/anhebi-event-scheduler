@@ -11,15 +11,20 @@ import java.util.*;
 public class EventoService {
 
     private static final Random random = new Random();
-    private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
+    private static final DateTimeFormatter formatter = DateTimeFormatter
+            .ofPattern("dd/MM/yyyy HH:mm");
 
     public static void salvarEventos(List<Evento> eventos) {
-        try (PrintWriter writer = new PrintWriter(new FileWriter(NomeArquivos.EVENTOS.getNomeArquivo()))) {
+        try (PrintWriter writer = new PrintWriter(
+                new FileWriter(NomeArquivos.EVENTOS.getNomeArquivo()))) {
             for (Evento e : eventos) {
-                String participantes = e.getIdParticipantes() != null ? String.join(",", e.getIdParticipantes()) : "";
-                writer.println(e.getId() + ";" + e.getNome() + ";" + e.getEndereco() + ";" + e.getCategoria() + ";"
-                        + e.getHorarioInicio().format(formatter) + ";" + e.getHorarioFim().format(formatter) + ";"
-                        + e.getDescricao() + ";" + participantes);
+                String participantes = e.getIdParticipantes() != null
+                        ? String.join(",", e.getIdParticipantes())
+                        : "";
+                writer.println(e.getId() + ";" + e.getNome() + ";" + e.getEndereco() + ";"
+                        + e.getCategoria() + ";" + e.getHorarioInicio().format(formatter) + ";"
+                        + e.getHorarioFim().format(formatter) + ";" + e.getDescricao() + ";"
+                        + participantes);
             }
         } catch (IOException ex) {
             System.out.println("Erro ao salvar eventos: " + ex.getMessage());
@@ -92,7 +97,8 @@ public class EventoService {
                     encontrado = true;
 
                     // mantém participantes existentes
-                    String[] participantes = parts.length > 7 && !parts[7].isEmpty() ? parts[7].split(",")
+                    String[] participantes = parts.length > 7 && !parts[7].isEmpty()
+                            ? parts[7].split(",")
                             : new String[] {};
 
                     List<String> lista = new ArrayList<>(List.of(participantes));
@@ -103,8 +109,9 @@ public class EventoService {
                     String participantesAtualizados = String.join(",", lista);
 
                     // escreve linha atualizada
-                    pw.println(parts[0] + ";" + parts[1] + ";" + parts[2] + ";" + parts[3] + ";" + parts[4] + ";"
-                            + parts[5] + ";" + parts[6] + ";" + participantesAtualizados);
+                    pw.println(parts[0] + ";" + parts[1] + ";" + parts[2] + ";" + parts[3] + ";"
+                            + parts[4] + ";" + parts[5] + ";" + parts[6] + ";"
+                            + participantesAtualizados);
                 } else {
                     // escreve linha original
                     pw.println(line);

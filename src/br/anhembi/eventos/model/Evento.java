@@ -13,8 +13,8 @@ public class Evento {
     private String descricao;
     private String[] idParticipantes;
 
-    public Evento(String id, String nome, String endereco, String categoria, LocalDateTime horarioInicio,
-            LocalDateTime horarioFim, String descricao) {
+    public Evento(String id, String nome, String endereco, String categoria,
+            LocalDateTime horarioInicio, LocalDateTime horarioFim, String descricao) {
         this.id = id;
         this.nome = nome;
         this.endereco = endereco;
@@ -63,7 +63,8 @@ public class Evento {
     @Override
     public String toString() {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
-        return id + ";" + nome + ";" + endereco + ";" + categoria + ";" + horarioInicio.format(formatter) + ";"
-                + horarioFim.format(formatter) + ";" + descricao;
+        return id + ";" + nome + ";" + endereco + ";" + categoria + ";"
+                + horarioInicio.format(formatter) + ";" + horarioFim.format(formatter) + ";"
+                + descricao;
     }
 }

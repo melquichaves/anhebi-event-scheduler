@@ -15,32 +15,13 @@ public class EventosController {
         String nome = menu.lerLinha("Nome do evento: ");
         String endereco = menu.lerLinha("Endereço: ");
         String categoria = menu.lerLinha("Categoria: ");
-
-        LocalDateTime horario = null;
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
-        while (horario == null) {
-            String dataHora = menu.lerLinha("Data e hora (dd/MM/yyyy HH:mm): ");
-            try {
-                horario = LocalDateTime.parse(dataHora, formatter);
-            } catch (Exception e) {
-                System.out.println(
-                        "Formato inválido! Digite no formato correto: dd/MM/yyyy HH:mm (ex: 14/08/2025 20:00)");
-            }
-        }
-
+        LocalDateTime horarioInicio = dateTimePrompt(menu, "Data de Início (dd/MM/yyyy HH:mm): ");
+        LocalDateTime horarioFim = dateTimePrompt(menu, "Data de Fim (dd/MM/yyyy HH:mm): ");
         String descricao = menu.lerLinha("Descrição: ");
 
-        eventos.add(new Evento(EventoService.gerarIdUnico(), nome, endereco, categoria, horario, horario.plusHours(2), // Definindo
-                                                                                                                       // horário
-                                                                                                                       // de
-                                                                                                                       // fim
-                                                                                                                       // como
-                                                                                                                       // 2
-                                                                                                                       // horas
-                                                                                                                       // após
-                                                                                                                       // o
-                                                                                                                       // início
-                descricao));
+        eventos.add(new Evento(EventoService.gerarIdUnico(), nome, endereco, categoria,
+                horarioInicio, horarioFim, descricao));
+
         EventoService.salvarEventos(eventos);
         System.out.println("Evento cadastrado!\n");
     }
@@ -54,6 +35,20 @@ public class EventosController {
                 System.out.println(e);
             }
             System.out.println();
+        }
+    }
+
+    private static LocalDateTime dateTimePrompt(Menu menu, String prompt) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
+
+        while (true) {
+            String dataHora = menu.lerLinha(prompt);
+            try {
+                return LocalDateTime.parse(dataHora, formatter);
+            } catch (Exception e) {
+                System.out.println(
+                        "Formato inválido! Digite no formato correto: dd/MM/yyyy HH:mm (ex: 14/08/2025 20:00)");
+            }
         }
     }
 

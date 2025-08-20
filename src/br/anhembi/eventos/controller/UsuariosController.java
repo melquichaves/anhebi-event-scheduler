@@ -18,7 +18,8 @@ public class UsuariosController {
                 if (idade <= 0)
                     System.out.print("Idade inválida. Digite novamente: ");
             } catch (NumberFormatException e) {
-                System.out.print("Entrada inválida. Por favor, digite um número válido para a idade: ");
+                System.out.print(
+                        "Entrada inválida. Por favor, digite um número válido para a idade: ");
             }
         }
 

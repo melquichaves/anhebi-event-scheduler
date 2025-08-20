@@ -9,7 +9,8 @@ import br.anhembi.eventos.model.enums.NomeArquivos;
 public class UsuarioService {
     private static final Random random = new Random();
 
-    public static Usuario cadastrarUsuario(String id, String nome, String email, int idade, String telefone) {
+    public static Usuario cadastrarUsuario(String id, String nome, String email, int idade,
+            String telefone) {
         Usuario usuario = new Usuario(id, nome, email, idade, telefone);
         salvarUsuario(usuario);
         return usuario;
@@ -29,7 +30,8 @@ public class UsuarioService {
         File file = new File(NomeArquivos.USUARIOS.getNomeArquivo());
         if (!file.exists())
             return usuarios;
-        try (BufferedReader br = new BufferedReader(new FileReader(NomeArquivos.USUARIOS.getNomeArquivo()))) {
+        try (BufferedReader br = new BufferedReader(
+                new FileReader(NomeArquivos.USUARIOS.getNomeArquivo()))) {
             String linha;
             while ((linha = br.readLine()) != null) {
                 usuarios.add(Usuario.fromString(linha));
@@ -41,7 +43,8 @@ public class UsuarioService {
     }
 
     private static void salvarUsuario(Usuario usuario) {
-        try (BufferedWriter bw = new BufferedWriter(new FileWriter(NomeArquivos.USUARIOS.getNomeArquivo(), true))) {
+        try (BufferedWriter bw = new BufferedWriter(
+                new FileWriter(NomeArquivos.USUARIOS.getNomeArquivo(), true))) {
             bw.write(usuario.toString());
             bw.newLine();
         } catch (IOException e) {

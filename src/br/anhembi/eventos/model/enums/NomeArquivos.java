@@ -1,7 +1,8 @@
 package br.anhembi.eventos.model.enums;
 
 public enum NomeArquivos {
-    USUARIOS("src/br/anhembi/eventos/services/db/users.data"), EVENTOS("src/br/anhembi/eventos/services/db/users.data");
+    USUARIOS("src/br/anhembi/eventos/services/db/users.data"),
+    EVENTOS("src/br/anhembi/eventos/services/db/users.data");
 
     private final String nomeArquivo;
 
