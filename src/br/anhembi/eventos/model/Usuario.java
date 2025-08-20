@@ -18,11 +18,12 @@ public class Usuario {
     public String getId() { return id; }
     public String getNome() { return nome; }
     public String getEmail() { return email; }
+    public int getIdade() { return idade; }
     public String getTelefone() { return telefone; }
 
     @Override
     public String toString() {
-        return id + ";" + nome + ";" + email + ";" + idade + ";" + telefone;
+        return id + ";" + nome + ";" + email + ";" + idade + ";" + telefone + ";";
     }
 
     public static Usuario fromString(String linha) {

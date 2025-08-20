@@ -4,9 +4,10 @@ import java.io.*;
 import java.util.*;
 
 import br.anhembi.eventos.model.Usuario;
+import br.anhembi.eventos.model.enums.NomeArquivos;
 
 public class UsuarioService {
-    private static final String FILE = "users.data";
+    private static final String FILE = NomeArquivos.USUARIOS.getNomeArquivo();
     private static final Random random = new Random();
 
     public static Usuario cadastrarUsuario(String id, String nome, String email, int idade, String telefone) {

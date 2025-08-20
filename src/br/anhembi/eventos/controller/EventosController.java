@@ -1,31 +1,25 @@
 package br.anhembi.eventos.controller;
 
+import br.anhembi.eventos.model.Evento;
+import br.anhembi.eventos.services.EventoService;
+import br.anhembi.eventos.view.Menu;
+
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
-import java.util.Scanner;
-
-import br.anhembi.eventos.model.Evento;
-import br.anhembi.eventos.utils.ArquivoEventos;
 
 public class EventosController {
-    public static List<Evento> eventos = ArquivoEventos.carregarEventos();
+    public static List<Evento> eventos = EventoService.carregarEventos();
 
-    public static void cadastrarEvento(Scanner sc) {
-        System.out.print("Nome do evento: ");
-        String nome = sc.nextLine();
-
-        System.out.print("Endereço: ");
-        String endereco = sc.nextLine();
-
-        System.out.print("Categoria: ");
-        String categoria = sc.nextLine();
+    public static void cadastrarEvento(Menu menu) {
+        String nome = menu.lerLinha("Nome do evento: ");
+        String endereco = menu.lerLinha("Endereço: ");
+        String categoria = menu.lerLinha("Categoria: ");
 
         LocalDateTime horario = null;
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
         while (horario == null) {
-            System.out.print("Data e hora (dd/MM/yyyy HH:mm): ");
-            String dataHora = sc.nextLine();
+            String dataHora = menu.lerLinha("Data e hora (dd/MM/yyyy HH:mm): ");
             try {
                 horario = LocalDateTime.parse(dataHora, formatter);
             } catch (Exception e) {
@@ -33,12 +27,12 @@ public class EventosController {
             }
         }
 
-        System.out.print("Descrição: ");
-        String descricao = sc.nextLine();
+        String descricao = menu.lerLinha("Descrição: ");
 
         eventos.add(new Evento(nome, endereco, categoria, horario, descricao));
         System.out.println("Evento cadastrado!\n");
     }
+
 
     public static void listarEventos() {
         if (eventos.isEmpty()) {
@@ -52,5 +46,5 @@ public class EventosController {
         }
     }
 
-    
+
 }
